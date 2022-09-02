@@ -11,6 +11,7 @@ var fireGroup; //grupo
 var robot;
 var robotimg;
 var robotGroup; //grupo
+var robotHp = 4;
 
 function preload()
 {
@@ -19,7 +20,7 @@ pulando = loadImage ("Sprites/pulando.png");
 soloimg = loadImage("Sprites/Solo.png");
 wandimg = loadImage ("Sprites/wand1.png");
 fireimg = loadImage ("Sprites/fire.gif")
-robotimg = loadImage ("Sprites/robot1.gif")
+robotimg = loadAnimation ("Sprites/robot1.png", "Sprites/robot2.png", "Sprites/robot3.png", "Sprites/robot4.png", "Sprites/robot5.png", "Sprites/robot6.png", "Sprites/robot7.png")
 }
 
 function setup() {
@@ -38,10 +39,11 @@ function setup() {
 
   wand1 = createSprite(mago.x, mago.y-150);
   wand1.addImage("wand1", wandimg);
-  wand1.scale = 0.1;
+  wand1.scale = 0.06;
 
   //criando grupo
-  fireGroup = new Group()
+  fireGroup = new Group();
+  robotGroup = new Group();
 }
 
 
@@ -98,27 +100,49 @@ wand1.rotation = mouseX/6-90;
 //console.log("mouse", mouseX);
 //console.log("mouse wand", wand1.rotation);
 
-
+console.log(robotHp);
 //}
-//wave()
+wave()
+
+if(robotGroup.collide(fireGroup)){
+robotHp -=1;
+fogo.destroy();
+
+
+}
+
+if(robotHp == 0){
+robot.destroy();
+robotHp = 4;
+
+}
+
 
   drawSprites();
  
 }
 
 function shooting(){
-fogo = createSprite(wand1.x, wand1.y-40);
+fogo = createSprite(wand1.x, wand1.y-55);
 fogo.addImage("fire", fireimg);
-fogo.setSpeedAndDirection(5, mouseX);
+fogo.setSpeedAndDirection(10, mouseX/6+180);
 console.log("fogoX", fogo.x);
 console.log("fogoY", fogo.y);
-
+fogo.lifeTime = 120;
+fireGroup.add(fogo);
 
 }
 function wave(){
-robot = createSprite (500, 500);
-robot.addImage ("robô", robotimg);
-robot.scale = 0.4
+  if(frameCount%120==0){
 
+//for(var i = 1; i<=4; i++){
+//colocar life time
+robot = createSprite (250, 100);
+robot.addAnimation ("robô", robotimg);
+robot.scale = 0.07;
+robotGroup.add(robot);
 }
+robotGroup.setSpeedAndDirectionEach(4,mago.x);
 
+//}
+}
