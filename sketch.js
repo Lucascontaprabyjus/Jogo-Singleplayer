@@ -12,6 +12,14 @@ var robot;
 var robotimg;
 var robotGroup; //grupo
 var robotHp = 4;
+var defesaimg;
+var potencializadorimg;
+var velocidadeimg;
+var invulnerabilidadeimg;
+var defesa;
+var invulnerabilidade;
+var velocidade;
+var potencializador;
 
 function preload()
 {
@@ -21,12 +29,17 @@ soloimg = loadImage("Sprites/Solo.png");
 wandimg = loadImage ("Sprites/wand1.png");
 fireimg = loadImage ("Sprites/fire.gif")
 robotimg = loadAnimation ("Sprites/robot1.png", "Sprites/robot2.png", "Sprites/robot3.png", "Sprites/robot4.png", "Sprites/robot5.png", "Sprites/robot6.png", "Sprites/robot7.png")
+velocidadeimg = loadImage ("Sprites/velocidade.png");
+invulnerabilidadeimg = loadImage ("Sprites/invulnerabilidade.png");
+potencializadorimg = loadImage ("Sprites/potencializador.png");
+defesaimg = loadImage ("Sprites/defesa.png");
 }
 
 function setup() {
 	//criando tela
 	createCanvas(1200, 700);
 	//criando sprites
+  
 
 	mago = createSprite(40, 550);
 	mago.addImage("mago", magoimg);
@@ -44,6 +57,7 @@ function setup() {
   //criando grupo
   fireGroup = new Group();
   robotGroup = new Group();
+  wave();
 }
 
 
@@ -59,7 +73,7 @@ function draw() {
 	mago.velocityY = -10;
 	mago.changeImage("pulando");
 
-  
+  cards();
   
 
   }
@@ -102,8 +116,8 @@ wand1.rotation = mouseX/6-90;
 
 console.log(robotHp);
 //}
-wave()
-
+//wave();
+robotGroup.setSpeedAndDirectionEach(4,mago.x);
 if(robotGroup.collide(fireGroup)){
 robotHp -=1;
 fogo.destroy();
@@ -133,16 +147,30 @@ fireGroup.add(fogo);
 
 }
 function wave(){
-  if(frameCount%120==0){
+ // if(frameCount%120==0){
 
-//for(var i = 1; i<=4; i++){
+for(var i = 1; i<=4; i++){
 //colocar life time
-robot = createSprite (250, 100);
+robot = createSprite (250*i, 100);
 robot.addAnimation ("robô", robotimg);
 robot.scale = 0.07;
 robotGroup.add(robot);
 }
-robotGroup.setSpeedAndDirectionEach(4,mago.x);
+//robotGroup.setSpeedAndDirectionEach(4,mago.x);
 
 //}
+}
+
+function cards(){
+defesa = createImg("Sprites/defesa.png");
+defesa.position(600, 350);
+defesa.size(80, 100);
+defesa.mouseClicked(fcDefesa);
+
+
+}
+function fcDefesa(){
+background ("gray");
+console.log("clicou")
+
 }
