@@ -20,6 +20,7 @@ var defesa;
 var invulnerabilidade;
 var velocidade;
 var potencializador;
+var backgroundimg;
 
 function preload()
 {
@@ -33,6 +34,7 @@ velocidadeimg = loadImage ("Sprites/velocidade.png");
 invulnerabilidadeimg = loadImage ("Sprites/invulnerabilidade.png");
 potencializadorimg = loadImage ("Sprites/potencializador.png");
 defesaimg = loadImage ("Sprites/defesa.png");
+backgroundimg = loadImage("Sprites/background.png");
 }
 
 function setup() {
@@ -62,7 +64,7 @@ function setup() {
 
 
 function draw() {
-  background("gray");
+  background(backgroundimg);
 
   //colisão do mago com o solo
   mago.collide(solo);
@@ -99,10 +101,6 @@ function draw() {
   //console.log(mago.y);
   mago.velocityY += 2;
 
-//ataque do mago
-if (keyDown("SPACE")){
-shooting();
-}
 
   //movimentação da varinha
 wand1.x = mago.x-20;
@@ -118,15 +116,16 @@ console.log(robotHp);
 //}
 //wave();
 robotGroup.setSpeedAndDirectionEach(4,mago.x);
-if(robotGroup.collide(fireGroup)){
+for(i = 0; i<4; i++){
+  if(fireGroup.collide(robotGroup.get(0))){
 robotHp -=1;
 fogo.destroy();
-
+}
 
 }
 
 if(robotHp == 0){
-robot.destroy();
+robot1.destroy();
 robotHp = 4;
 
 }
@@ -139,7 +138,6 @@ robotHp = 4;
 function shooting(){
 fogo = createSprite(wand1.x, wand1.y-55);
 fogo.addImage("fire", fireimg);
-fogo.setSpeedAndDirection(10, mouseX/6+180);
 console.log("fogoX", fogo.x);
 console.log("fogoY", fogo.y);
 fogo.lifeTime = 120;
@@ -149,17 +147,22 @@ fireGroup.add(fogo);
 function wave(){
  // if(frameCount%120==0){
 
-for(var i = 1; i<=4; i++){
+for(var i = 0; i<4; i++){
 //colocar life time
 robot = createSprite (250*i, 100);
 robot.addAnimation ("robô", robotimg);
 robot.scale = 0.07;
 robotGroup.add(robot);
+
+/*robot2 = createSprite (500, 100);
+robot2.addAnimation ("robô", robotimg);
+robot2.scale = 0.07;
+robotGroup.add(robot2);*/
 }
 //robotGroup.setSpeedAndDirectionEach(4,mago.x);
 
 //}
-}
+//}
 
 function cards(){
 defesa = createImg("Sprites/defesa.png");
@@ -173,4 +176,17 @@ function fcDefesa(){
 background ("gray");
 console.log("clicou")
 
+}
+function keyPressed(){
+  if(keyCode == 32){
+    shooting();
+  }
+}
+function keyReleased(){
+  if(keyCode == 32){
+  setTimeout(()=> {
+    fogo.setSpeedAndDirection(10, mouseX/6+180);
+  }, 200);
+  
+}
 }
